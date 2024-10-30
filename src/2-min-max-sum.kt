@@ -1,19 +1,29 @@
 fun main() {
-    // Reading input
     val n = readLine()!!.toInt()
     val array = readLine()!!.split(" ").map { it.toInt() }
 
-    if(n>100){
-        return println("N is too big")
+    fun digitSum(num: Int): Int {
+        return num.toString().map { it.toString().toIntOrNull() ?: 0 }.sum()
     }
 
-    fun sumOfDigits(num: Int): Int {
-        return num.toString().map { it.toString().toInt() }.sum()
+    var minElement = array[0]
+    var maxElement = array[0]
+    var minDigitSum = digitSum(array[0])
+    var maxDigitSum = digitSum(array[0])
+
+    for (element in array) {
+        val currentDigitSum = digitSum(element)
+
+        if (currentDigitSum < minDigitSum || (currentDigitSum == minDigitSum && element < minElement)) {
+            minElement = element
+            minDigitSum = currentDigitSum
+        }
+
+        if (currentDigitSum > maxDigitSum || (currentDigitSum == maxDigitSum && element > maxElement)) {
+            maxElement = element
+            maxDigitSum = currentDigitSum
+        }
     }
-
-    val minElement = array.minWithOrNull(compareBy({ sumOfDigits(it) }, { it }))
-
-    val maxElement = array.maxWithOrNull(compareBy({ sumOfDigits(it) }, { it }))
 
     println(minElement)
     println(maxElement)
